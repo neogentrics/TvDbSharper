@@ -150,13 +150,17 @@ namespace GenerateDto
 
         public string[] Enum { get; set; }
 
-        public string Example { get; set; }
+        public object Example { get; set; }
 
         [YamlMember(Alias = "x-go-package", ApplyNamingConventions = false)]
         public string GoPackage { get; set; }
-        
+
         [YamlMember(Alias = "$ref", ApplyNamingConventions = false)]
         public string Ref { get; set; }
+
+        // Added to support newer Swagger/OpenAPI spec
+        [YamlMember(Alias = "additionalProperties", ApplyNamingConventions = false)]
+        public object AdditionalProperties { get; set; }
     }
 
     public class TypeModel
@@ -179,5 +183,9 @@ namespace GenerateDto
         public int Maximum { get; set; }
 
         public string Description { get; set; }
+
+        // Added to support newer Swagger/OpenAPI spec that includes 'nullable'
+        public bool Nullable { get; set; }
     }
+
 }

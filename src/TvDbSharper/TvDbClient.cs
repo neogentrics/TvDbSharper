@@ -208,8 +208,15 @@ namespace TvDbSharper
 
         private class UnauthorizedData
         {
+            [JsonProperty("status")]
+            public string Status { get; set; }
+
             [JsonProperty("message")]
             public string Message { get; set; }
+
+            // --- ADD THIS LINE ---
+            [JsonProperty("data")]
+            public object Data { get; set; } // 'object' will accept anything (null, object, etc.)
         }
 
         private class NotFoundData : TvDbApiResponse<object>

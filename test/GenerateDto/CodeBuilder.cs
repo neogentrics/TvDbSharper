@@ -14,12 +14,14 @@ namespace GenerateDto
             { "getAllCompanies", "Companies" },
             { "getAllContentRatings", "ContentRatings" },
             { "getAllCountries", "Countries" },
+            { "getAllEpisodes", "AllEpisodes" },      // ---> Added new Endpoint name to NameMap <---
             { "getAllGenders", "Genders" },
             { "getAllGenres", "Genres" },
             { "getAllLanguages", "Languages" },
             { "getAllLists", "Lists" },
             { "getAllMovie", "Movies" },
             { "getAllMovieStatuses", "MovieStatuses" },
+            { "getAllPeople", "AllPeople" },  // ---> Added new Endpoint name to NameMap <---
             { "getAllPeopleTypes", "PeopleTypes" },
             { "getAllSeasons", "Seasons" },
             { "getAllSeries", "AllSeries" },
@@ -41,22 +43,27 @@ namespace GenerateDto
             { "getEpisodeTranslation", "EpisodeTranslation" },
             { "getGenreBase", "Genre" },
             { "getList", "List" },
+            { "getListBySlug", "ListBySlug" },  // ---> Added new Endpoint name to NameMap <---
             { "getListExtended", "ListExtended" },
             { "getListTranslation", "ListTranslation" },
             { "getMovieBase", "Movie" },
+            { "getMovieBaseBySlug", "MovieBySlug" },   // ---> Added new Endpoint name to NameMap <---
             { "getMovieExtended", "MovieExtended" },
             { "getMovieTranslation", "MovieTranslation" },
             { "getPeopleBase", "People" },
             { "getPeopleExtended", "PeopleExtended" },
             { "getPeopleTranslation", "PeopleTranslation" },
             { "getSearchResults", "Search" },
+            { "getSearchResultsByRemoteId", "SearchByRemoteId" },    // ---> Added new Endpoint name to NameMap <---
             { "getSeasonBase", "Season" },
             { "getSeasonExtended", "SeasonExtended" },
             { "getSeasonTranslation", "SeasonTranslation" },
             { "getSeasonTypes", "SeasonTypes" },
             { "getSeriesBase", "Series" },
+            { "getSeriesBaseBySlug", "SeriesBySlug" },     // ---> Added new Endpoint name to NameMap <---
             { "getSeriesExtended", "SeriesExtended" },
             { "getSeriesEpisodes", "SeriesEpisodes" },
+            { "getSeriesNextAired", "SeriesNextAired" },   // ---> Added new Endpoint name to NameMap <---
             { "getSeriesSeasonEpisodesTranslated", "SeriesSeasonEpisodesTranslated" },
             { "getSeriesTranslation", "SeriesTranslation" },
             { "getSeriesArtworks", "SeriesArtworks" },
@@ -64,6 +71,8 @@ namespace GenerateDto
             { "getAllInspirationTypes", "InspirationTypes" },
             { "getMoviesFilter", "MoviesFilter" },
             { "getSeriesFilter", "SeriesFilter" },
+            { "getUserInfo", "UserInfo" },                 // ---> Added new Endpoint name to NameMap <---
+            { "getUserInfoById", "UserInfoDto" },          // ---> Added new Endpoint name to NameMap <---
         };
 
         private static readonly List<PropertyOverrideModel> PropertyOverrides = new()
@@ -296,26 +305,28 @@ namespace GenerateDto
             new()
             {
                 MatchClassName = "SearchResultDto",
-                MatchFieldName = "extendedTitle",
-                OverrideFieldName = "extended_title",
+                MatchFieldName = "nameTranslated",
+                OverrideFieldName = "name_translated",
                 OverridePropertyAttributes = new List<string>
                 {
-                    "[JsonProperty(\"extended_title\")]",
+                    "[JsonProperty(\"name_translated\")]",
                 },
             },
+            // --- PASTE THE NEW, CORRECT BLOCK HERE ---
             new()
             {
                 MatchClassName = "SearchResultDto",
-                MatchFieldName = "imageUrl",
-                OverrideFieldName = "image_url",
+                MatchFieldName = "companyType", // <-- The "lie" from the swagger file
+                OverrideFieldName = "company_type", // <-- The "truth" from the live API
                 OverridePropertyAttributes = new List<string>
                 {
-                    "[JsonProperty(\"image_url\")]",
+                    "[JsonProperty(\"company_type\")]", // <-- This forces the correct attribute
                 },
             },
+            // ----------------------------------------
             new()
             {
-                MatchClassName = "SearchResultDto",
+                MatchClassName = "SeasonBaseRecordDto",
                 MatchFieldName = "primaryLanguage",
                 OverrideFieldName = "primary_language",
                 OverridePropertyAttributes = new List<string>
@@ -442,6 +453,7 @@ namespace GenerateDto
 
         private static readonly Dictionary<string, List<PropertyModel>> ExtraProperties = new()
         {
+
             {
                 "CompanyDto", new List<PropertyModel>
                 {
@@ -462,17 +474,43 @@ namespace GenerateDto
                 {
                     new()
                     {
-                        FieldName = "networks",
-                        PropertyName = "Networks",
-                        PropertyType = "string",
+                        FieldName = "absoluteNumber",
+                        PropertyName = "AbsoluteNumber",
+                        PropertyType = "int?", // Making it nullable is safest
                         PropertyAttributes = new List<string>
                         {
-                            "[JsonProperty(\"networks\")]",
+                            "[JsonProperty(\"absoluteNumber\")]",
                         },
                     },
                 }
             },
             {
+            "ListExtendedRecordDto", new List<PropertyModel>
+            {
+                    new() // This is the one we added last time
+                    {
+                        FieldName = "remoteIds",
+                        PropertyName = "RemoteIds",
+                        PropertyType = "RemoteIDDto[]",
+                        PropertyAttributes = new List<string>
+                        {
+                            "[JsonProperty(\"remoteIds\")]",
+                        },
+                    },
+                    new() // --- ADD THIS NEW BLOCK ---
+                    {
+                        FieldName = "tags",
+                        PropertyName = "Tags",
+                        PropertyType = "TagOptionDto[]", // This is the standard type for tags
+                        PropertyAttributes = new List<string>
+                        {
+                            "[JsonProperty(\"tags\")]",
+                        },
+                    },
+                }
+            },
+
+            /*{
                 "MovieExtendedRecordDto", new List<PropertyModel>
                 {
                     new()
@@ -500,24 +538,34 @@ namespace GenerateDto
                             "[JsonProperty(\"translations\")]",
                         },
                     },
-                }
-            },
+                } 
+            },*/
             {
-                "SearchResultDto", new List<PropertyModel>
+            "SearchResultDto", new List<PropertyModel>
+            {
+                new() // This one was already here
                 {
-                    new()
+                    FieldName = "extended_title",
+                    PropertyName = "ExtendedTitle",
+                    PropertyType = "string",
+                    PropertyAttributes = new List<string>
                     {
-                        FieldName = "extended_title",
-                        PropertyName = "ExtendedTitle",
-                        PropertyType = "string",
-                        PropertyAttributes = new List<string>
-                        {
-                            "[JsonProperty(\"extended_title\")]",
-                        },
+                        "[JsonProperty(\"extended_title\")]",
                     },
-                }
-            },
-            {
+                },
+                new() // This one was from a previous step
+                {
+                    FieldName = "primary_type",
+                    PropertyName = "PrimaryType",
+                    PropertyType = "string",
+                    PropertyAttributes = new List<string>
+                    {
+                        "[JsonProperty(\"primary_type\")]",
+                    },
+                },
+            }
+        },
+            /*{
                 "SeriesExtendedRecordDto", new List<PropertyModel>
                 {
                     new()
@@ -531,7 +579,7 @@ namespace GenerateDto
                         },
                     },
                 }
-            },
+            },*/
             {
                 "SeriesBaseRecordDto", new List<PropertyModel>
                 {
@@ -635,12 +683,15 @@ namespace GenerateDto
         };
 
         private static readonly Dictionary<string, string> MethodReturnTypeOverrides = new()
-        {
-            { "getSeriesEpisodes", "GetSeriesEpisodesResponseData" },
-            { "getSeriesSeasonEpisodesTranslated", "SeriesExtendedRecordDto" },
-            { "getListTranslation", "TranslationDto[]" },
-            { "getSeasonTypes", "SeasonTypeDto[]" },
-        };
+{
+    { "getSeriesEpisodes", "GetSeriesEpisodesResponseData" },
+    { "getSeriesSeasonEpisodesTranslated", "SeriesExtendedRecordDto" },
+    { "getListTranslation", "TranslationDto[]" },
+    { "getSeasonTypes", "SeasonTypeDto[]" },
+    { "getUserInfo", "UserInfoDto" },
+    { "getUserInfoById", "UserInfoDto" },
+    { "updates", "EntityUpdateDto[]" }
+};
 
         public static NamespaceModel GetNamespace(SwaggerConfig swaggerConfig)
         {
@@ -886,6 +937,7 @@ namespace GenerateDto
             {
                 "integer" => "int",
                 "number" => "int",
+                "boolean" => "bool", // <-- This is the new line
                 _ => parameterInfo.Schema.Type,
             };
         }
