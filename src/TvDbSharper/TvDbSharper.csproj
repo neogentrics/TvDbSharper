@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>TvDbSharper is fully featured modern REST client for the TheTVDB API v4</Description>
-    <VersionPrefix>4.0.10</VersionPrefix>
+    <VersionPrefix>4.0.11</VersionPrefix>
     <Authors>HristoKolev</Authors>
-    <TargetFramework>netstandard1.1</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>TvDbSharper</AssemblyName>
@@ -14,17 +14,19 @@
     <PackageLicenseUrl>https://github.com/HristoKolev/TvDbSharper/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/HristoKolev/TvDbSharper</RepositoryUrl>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <Version>4.0.10</Version>
-    <PackageVersion>4.0.10</PackageVersion>
+    <Version>4.0.11</Version>
+    <PackageVersion>4.0.11</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
 </Project>
