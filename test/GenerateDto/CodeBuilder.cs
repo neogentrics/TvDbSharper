@@ -312,6 +312,7 @@ namespace GenerateDto
                     "[JsonProperty(\"name_translated\")]",
                 },
             },
+            // --- PASTE THE NEW, CORRECT BLOCK HERE ---
             new()
             {
                 MatchClassName = "SearchResultDto",
